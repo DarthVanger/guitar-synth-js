@@ -1,0 +1,15 @@
+{
+  "name": "guitar-synth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "RingBuffer.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^25.3.0"
+  },
+  "type": "module"
+}
