@@ -1,0 +1,26 @@
+<button type="button" onclick="play()">play</button>
+<script>
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioContext();
+
+  const noiseLength = 5;
+
+  const bufferSize = audioCtx.sampleRate * noiseLength;
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+
+  let data = buffer.getChannelData(0); // get data
+
+  // fill the buffer with noise
+  for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+  }
+
+  let noise = audioCtx.createBufferSource();
+  noise.buffer = buffer;
+
+  noise.connect(audioCtx.destination);
+
+  function play() {
+    noise.start();
+  }
+</script>
