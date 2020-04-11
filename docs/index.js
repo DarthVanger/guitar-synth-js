@@ -1,7 +1,7 @@
 console.log('hello world');
 import Synth from './Synth.js';
 import tab from './tab.js';
-
+  console.log('tab: ', tab);
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const sampleRate = 44100;
@@ -55,7 +55,7 @@ function createNoise() {
 }
 
 function playWithHarmonics() {
-
+  console.log('playWithHarmonics');
   console.log('tab: ', tab);
   const allNotesBufferSize = bufferSize * tab.length;
 
@@ -63,17 +63,46 @@ function playWithHarmonics() {
 
   const synth = new Synth();
 
-  const buffers = tab.map(n => synth.note(n, 2));
+  const noteDuration = 2;
+  const notesNum = 4;
 
-  const buffer = new Float32Array(allNotesBufferSize);
+  const totalDuration = 8;
 
-  let len = 0;
-  buffers.forEach(b => {
-    for (let i=0; i<b.length; i++) {
-      buffer[len] = b[i];
-      len++
-    }
+  const stringBuffers = [];
+
+  tab.forEach(string => {
+    const buffer = new Float32Array(bufferSize * totalDuration);
+    let i = 0;
+    string.forEach((note) => {
+      const noteBuffer = synth.note(parseInt(note), 2);
+      for (let j = 0; j < bufferSize; j++) {
+        buffer[i + j] = noteBuffer[j];
+        i++;
+      }
+    });
+    stringBuffers.push(buffer);
   });
+  console.log('stringBuffers: ', stringBuffers);
+
+  const bufferLength = stringBuffers[5].length;
+  console.log('bufferLength: ', bufferLength);
+  const buffer = new Float32Array(bufferLength * 4 * 2);
+  for (let i = 0; i < bufferLength; i++) {
+    buffer[i] = stringBuffers[4][i];
+  }
+
+  console.log('buffer: ', buffer);
+  //buffers.push(stingsBuffers[4]);
+  //  
+  //const buffer = new Float32Array(allNotesBufferSize);
+
+  //let len = 0;
+  //buffers.forEach(b => {
+  //  for (let i=0; i<b.length; i++) {
+  //    buffer[len] = b[i];
+  //    len++
+  //  }
+  //});
 
   audioBuffer.copyToChannel(buffer, 0);
 
@@ -87,3 +116,4 @@ function playWithHarmonics() {
 document.querySelector('[data-action="play440"').addEventListener('click', play440);
 document.querySelector('[data-action="playNoise"').addEventListener('click', playNoise);
 document.querySelector('[data-action="playWithHarmonics"').addEventListener('click', playWithHarmonics);
+playWithHarmonics();

@@ -11,9 +11,14 @@ E|-0-------10---9---8-------------|
 
 const tabText = textarea.value;
 
-const numbers = tabText.match(/[0-9]/g);
-console.log('numbers: ', numbers);
+const strings = tabText.match(/.+|$/g)
 
-const tab = numbers;
+console.log('strings: ', strings);
+const tab = [];
+strings.forEach(s => {
+  tab.push(s.match(/[0-9]+/g) || []);
+});
+console.log('tab: ', tab);
+
 
 export default tab;
