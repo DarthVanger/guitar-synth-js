@@ -59,8 +59,8 @@ function playWithHarmonics() {
   console.log('tab: ', tab);
 
   const noteDuration = 0.1;
-  const notesNum = 73;
-  const totalDuration = 8;
+  const notesNum = tab[0].length;
+  const totalDuration = noteDuration * notesNum;
   const bufferLength = sampleRate * totalDuration;
 
   const audioBuffer = audioCtx.createBuffer(1, bufferLength, sampleRate);

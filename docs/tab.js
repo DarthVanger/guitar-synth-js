@@ -6,6 +6,16 @@ F#|----2---2-------2---2--------0---0--------1---1--------------------------|
 C#|--2-------0---0-------0----2-------2----0-------0------------------------|
 G#|0------------------------3-----------------------------------------------|
 C#|------------3-------------------------2----------------------------------|
+ 
+ 
+[Chorus]
+ 
+D#|-------------------------------------------------------------------------|
+A#|-------------------------------------------------------------------------|
+F#|-2--2-2-2--------------5--5-5-5------------------------------------------|
+C#|-2--2-2-2---3--3-3-3---5--5-5-5---2--2-2-2-------------------------------|
+G#|-0--0-0-0---3--3-3-3---3--3-3-3---2--2-2-2-------------------------------|
+C#|------------3--3-3-3--------------2--2-2-2-------------------------------|
 `.trim();
 
 export const tabNumToPitch = (tabNum, stringNum) => {
@@ -35,17 +45,34 @@ export const tabNumToPitch = (tabNum, stringNum) => {
 };
 
 const parseTab = () => {
+  const tab = [];
+  for (let i = 0; i < 6; i++) {
+    tab[i] = [];
+  }
 
   const tabText = textarea.value;
 
-  const strings = tabText.match(/[|].+|$/g)
-    .slice(0, -1) // remove last empty row (don't know why is it there)
+  const stringLines = tabText.match(/[|].+[|]/g)
     .map(s => s.slice(1, s.length - 1)); // remove vertical bars in the beginning and end
 
-  console.log('strings: ', strings);
-  const tab = strings;
+  let i = 0;
+  let tabJ = 0;
+  while (i < stringLines.length) {
+    const stringNum = i % 6;
+    for (let j = 0; j < stringLines[i].length; j++) {
+      tab[stringNum][j + tabJ] = stringLines[i][j];
+    }
 
-  return tab;
+    if (stringNum === 5) {
+       tabJ += stringLines[i].length;
+    }
+
+    i++;
+  }
+
+  console.log('tab: ', tab);
+
+  return tab.map(a => a.join(''));;
 
   console.log('tab: ', tab);
 }
