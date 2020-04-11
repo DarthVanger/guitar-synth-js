@@ -1,5 +1,6 @@
 console.log('hello world');
 import Synth from './Synth.js';
+import tab from './tab.js';
 
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 
@@ -55,13 +56,26 @@ function createNoise() {
 
 function playWithHarmonics() {
 
-  const audioBuffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+  console.log('tab: ', tab);
+  const allNotesBufferSize = bufferSize * tab.length;
 
-  const synth = new Synth(buffer);
+  const audioBuffer = audioCtx.createBuffer(1, allNotesBufferSize, sampleRate);
 
-  const note = synth.note(7, 5);
+  const synth = new Synth();
 
-  audioBuffer.copyToChannel(note, 0);
+  const buffers = tab.map(n => synth.note(n, 2));
+
+  const buffer = new Float32Array(allNotesBufferSize);
+
+  let len = 0;
+  buffers.forEach(b => {
+    for (let i=0; i<b.length; i++) {
+      buffer[len] = b[i];
+      len++
+    }
+  });
+
+  audioBuffer.copyToChannel(buffer, 0);
 
   const source = audioCtx.createBufferSource();
   source.connect(audioCtx.destination)
