@@ -1,6 +1,6 @@
 console.log('hello world');
 import Synth from './Synth.js';
-import tab from './tab.js';
+import { parseTab } from './tab.js';
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const sampleRate = 44100;
@@ -55,6 +55,7 @@ function createNoise() {
 
 function playWithHarmonics() {
   console.log('playWithHarmonics');
+  const tab = parseTab();
   console.log('tab: ', tab);
 
   const noteDuration = 2;
@@ -94,4 +95,3 @@ function playWithHarmonics() {
 document.querySelector('[data-action="play440"').addEventListener('click', play440);
 document.querySelector('[data-action="playNoise"').addEventListener('click', playNoise);
 document.querySelector('[data-action="playWithHarmonics"').addEventListener('click', playWithHarmonics);
-playWithHarmonics();
