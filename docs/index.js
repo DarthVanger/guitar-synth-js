@@ -20,7 +20,7 @@ function playTab() {
   const synth = new Synth();
 
   const notesNum = Math.floor(tab.length / 6);
-  const noteDuration = 0.1;
+  const noteDuration = 0.05;
   const totalDuration = noteDuration * notesNum;
   const bufferLength = sampleRate * totalDuration;
 
@@ -45,7 +45,7 @@ function playTab() {
       inStringIndex = 0;
       onAString = true;
     }
-    if (tab[i] == '|' && tab[i-1] == '-') {
+    if (tab[i] == '|' && tab[i-1] == '-' && onAString) {
       onAString = false;
       stringNum = ( stringNum + 1 ) % 6;
       noteLineNum++;
@@ -135,6 +135,7 @@ function playTab() {
     textarea.innerHTML = tab;
   });
 
+  textarea.focus();
   source.start();
 }
 
