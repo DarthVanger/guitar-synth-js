@@ -1,5 +1,5 @@
-export const textarea = document.querySelector('textarea');
-textarea.value = `
+export const textarea = document.querySelector('#tab-editor');
+textarea.innerHTML = `
 D#|-------------------------------------------------------------------------|
 A#|------1-----------0------------1------------0----------------------------|
 F#|----2---2-------2---2--------0---0--------1---1--------------------------|
@@ -16,7 +16,7 @@ F#|-2--2-2-2--------------5--5-5-5------------------------------------------|
 C#|-2--2-2-2---3--3-3-3---5--5-5-5---2--2-2-2-------------------------------|
 G#|-0--0-0-0---3--3-3-3---3--3-3-3---2--2-2-2-------------------------------|
 C#|------------3--3-3-3--------------2--2-2-2-------------------------------|
-`.trim();
+`.trim().split('\n').map(s => s + '<br>').join('');;
 
 export const tabNumToPitch = (tabNum, stringNum) => {
     console.log(`tabNumToPitch(${tabNum}, ${stringNum})`);
@@ -45,36 +45,9 @@ export const tabNumToPitch = (tabNum, stringNum) => {
 };
 
 const parseTab = () => {
-  const tab = [];
-  for (let i = 0; i < 6; i++) {
-    tab[i] = [];
-  }
-
-  const tabText = textarea.value;
-
-  const stringLines = tabText.match(/[|].+[|]/g)
-    .map(s => s.slice(1, s.length - 1)); // remove vertical bars in the beginning and end
-
-  let i = 0;
-  let tabJ = 0;
-  while (i < stringLines.length) {
-    const stringNum = i % 6;
-    for (let j = 0; j < stringLines[i].length; j++) {
-      tab[stringNum][j + tabJ] = stringLines[i][j];
-    }
-
-    if (stringNum === 5) {
-       tabJ += stringLines[i].length;
-    }
-
-    i++;
-  }
-
-  console.log('tab: ', tab);
+  const tabText = textarea.innerHTML;
 
   return tabText;
-
-  console.log('tab: ', tab);
 }
 
 export { parseTab };

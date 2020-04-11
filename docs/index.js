@@ -133,11 +133,13 @@ function playWithHarmonics() {
 
     noteHighlights.push(() => {
       setTimeout(() => {
-        textarea.value = textarea.value.substring(0, i) + '*' + textarea.value.substring(i + 1);
+        textarea.innerHTML = tab.substring(0, i) + '|' + tab.substring(i + 1);
       }, notePlayTime);
     });
 
   }
+
+  //textarea.innerHTML = '<p style="color:red">' + textarea.innerHTML + '</p>';
 
   console.log('stringBuffers: ', stringBuffers);
   console.log('mergedTab: ', mergedTab.map(s => s.join('')));
