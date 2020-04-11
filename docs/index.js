@@ -74,7 +74,7 @@ function playWithHarmonics() {
     const buffer = new Float32Array(bufferSize * totalDuration);
     let i = 0;
     string.forEach((note) => {
-      const noteBuffer = synth.note(parseInt(note), 2);
+      const noteBuffer = synth.note(parseInt(note), noteDuration);
       for (let j = 0; j < bufferSize; j++) {
         buffer[i + j] = noteBuffer[j];
         i++;
@@ -84,25 +84,14 @@ function playWithHarmonics() {
   });
   console.log('stringBuffers: ', stringBuffers);
 
-  const bufferLength = stringBuffers[5].length;
-  console.log('bufferLength: ', bufferLength);
-  const buffer = new Float32Array(bufferLength * 4 * 2);
+  const bufferLength = bufferSize * totalDuration;
+  const buffer = new Float32Array(bufferLength);
+
   for (let i = 0; i < bufferLength; i++) {
     buffer[i] = stringBuffers[4][i];
   }
 
   console.log('buffer: ', buffer);
-  //buffers.push(stingsBuffers[4]);
-  //  
-  //const buffer = new Float32Array(allNotesBufferSize);
-
-  //let len = 0;
-  //buffers.forEach(b => {
-  //  for (let i=0; i<b.length; i++) {
-  //    buffer[len] = b[i];
-  //    len++
-  //  }
-  //});
 
   audioBuffer.copyToChannel(buffer, 0);
 

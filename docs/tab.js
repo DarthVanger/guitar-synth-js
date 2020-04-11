@@ -11,7 +11,7 @@ E|-0-------10---9---8-------------|
 
 const tabText = textarea.value;
 
-const strings = tabText.match(/.+|$/g)
+const strings = tabText.match(/.+|$/g).slice(0, -1);
 
 console.log('strings: ', strings);
 const tab = [];
