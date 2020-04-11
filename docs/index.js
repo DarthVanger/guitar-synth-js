@@ -1,6 +1,6 @@
 console.log('hello world');
 import Synth from './Synth.js';
-import { parseTab, tabNumToPitch } from './tab.js';
+import { parseTab, tabNumToPitch, textarea } from './tab.js';
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const sampleRate = 44100;
@@ -79,7 +79,7 @@ function playWithHarmonics() {
   let noteLineNum = 0;
   let mergedTabIndex = 0;
   let inStringIndex = 0;
-  console.log('tab.length: ', tab.length);
+  let noteHighlights = [];
   for (let i = 0; i < tab.length; i++) {
     if (tab[i] == '|' && tab[i+1] == '-') {
       tabPieceLength = 0;
@@ -93,7 +93,6 @@ function playWithHarmonics() {
       if (stringNum % 5 === 0) {
         mergedTabIndex += tabPieceLength;
         noteNum += tabPieceLength;
-        console.log('mergedTabIndex: ', mergedTabIndex);
       }
     }
 
@@ -129,6 +128,15 @@ function playWithHarmonics() {
       const offset = (mergedTabIndex + inStringIndex) * sampleRate * noteDuration;
       stringBuffers[stringNum][j + offset] = noteBuffer[j];
     }
+
+    const notePlayTime = (inStringIndex + mergedTabIndex) * noteDuration * 1000;
+
+    noteHighlights.push(() => {
+      setTimeout(() => {
+        textarea.value = textarea.value.substring(0, i) + '*' + textarea.value.substring(i + 1);
+      }, notePlayTime);
+    });
+
   }
 
   console.log('stringBuffers: ', stringBuffers);
@@ -152,11 +160,27 @@ function playWithHarmonics() {
 
   audioBuffer.copyToChannel(buffer, 0);
 
-  const source = audioCtx.createBufferSource();
-  source.connect(audioCtx.destination)
-  source.buffer = audioBuffer;
 
+  const analyser =  audioCtx.createAnalyser();
+  analyser.fftSize = 2048;
+
+  const source = audioCtx.createBufferSource();
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+  source.buffer = audioBuffer;
+  
+  //const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  textarea.focus();
+  noteHighlights.map(f => f());
   source.start();
+
+  setTimeout(() => {
+    analyser.getByteTimeDomainData(dataArray);
+    console.log('dataArray: ', dataArray);
+  }, 2000);
+
 }
 
 document.querySelector('[data-action="play440"').addEventListener('click', play440);

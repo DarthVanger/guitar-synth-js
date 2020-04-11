@@ -1,4 +1,4 @@
-const textarea = document.querySelector('textarea');
+export const textarea = document.querySelector('textarea');
 textarea.value = `
 D#|-------------------------------------------------------------------------|
 A#|------1-----------0------------1------------0----------------------------|
