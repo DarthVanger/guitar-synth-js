@@ -12,49 +12,8 @@ const bufferSize = sampleRate * duration;
 const audioCtx = new AudioContext({sampleRate});
 const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
 
-let data = buffer.getChannelData(0);
-for (let i = 0; i <= bufferSize; i++) {
-  data[i] = Math.sin(2 * Math.PI * i * hz / sampleRate);
-}
-
-let sound = audioCtx.createBufferSource();
-sound.buffer = buffer;
-
-sound.connect(audioCtx.destination);
-
-const noise = createNoise();
-
-function play440() {
-  sound.start();
-}
-
-function playNoise() {
-  noise.start();
-}
-
-function createNoise() {
-  const noiseLength = 5;
-
-  const bufferSize = audioCtx.sampleRate * noiseLength;
-  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-
-  let data = buffer.getChannelData(0);
-
-  // fill the buffer with noise
-  for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-  }
-
-  let noise = audioCtx.createBufferSource();
-  noise.buffer = buffer;
-
-  noise.connect(audioCtx.destination);
-
-  return noise;
-}
-
-function playWithHarmonics() {
-  console.log('playWithHarmonics');
+function playTab() {
+  console.log('playTab');
   const tab = parseTab();
   console.log('tab: ', tab);
 
@@ -161,19 +120,9 @@ function playWithHarmonics() {
 
   audioBuffer.copyToChannel(buffer, 0);
 
-
-  const analyser =  audioCtx.createAnalyser();
-  analyser.fftSize = 2048;
-
   const source = audioCtx.createBufferSource();
-  source.connect(analyser);
-  analyser.connect(audioCtx.destination);
+  source.connect(audioCtx.destination);
   source.buffer = audioBuffer;
-  
-  //const bufferLength = analyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
-
-  textarea.focus();
   
   audioCtx.onstatechange = function() {
     if (audioCtx.state === 'running') {
@@ -181,15 +130,12 @@ function playWithHarmonics() {
       noteHighlights.map(f => f());
     }
   }
+
+  source.addEventListener('ended', () => { 
+    textarea.innerHTML = tab;
+  });
+
   source.start();
-
-  setTimeout(() => {
-    analyser.getByteTimeDomainData(dataArray);
-    console.log('dataArray: ', dataArray);
-  }, 2000);
-
 }
 
-document.querySelector('[data-action="play440"').addEventListener('click', play440);
-document.querySelector('[data-action="playNoise"').addEventListener('click', playNoise);
-document.querySelector('[data-action="playWithHarmonics"').addEventListener('click', playWithHarmonics);
+document.querySelector('[data-action="playTab"').addEventListener('click', playTab);
