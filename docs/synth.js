@@ -23,6 +23,7 @@ class Synth {
 
    // Play note of given pitch, with harmonics.
    note(pitch, t) {
+      console.log('synth for note ' + pitch + ' and duration + ' + t);
       const hz = 440.0 * Math.pow(2, pitch / 12.0);
       const a = this.tone(hz, t);
       const hi = this.tone(2*hz, t);

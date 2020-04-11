@@ -1,7 +1,6 @@
 console.log('hello world');
 import Synth from './Synth.js';
 import tab from './tab.js';
-  console.log('tab: ', tab);
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const sampleRate = 44100;
@@ -57,41 +56,32 @@ function createNoise() {
 function playWithHarmonics() {
   console.log('playWithHarmonics');
   console.log('tab: ', tab);
-  const allNotesBufferSize = bufferSize * tab.length;
-
-  const audioBuffer = audioCtx.createBuffer(1, allNotesBufferSize, sampleRate);
-
-  const synth = new Synth();
 
   const noteDuration = 2;
   const notesNum = 4;
-
   const totalDuration = 8;
+  const bufferLength = sampleRate * totalDuration;
+
+  const audioBuffer = audioCtx.createBuffer(1, bufferLength, sampleRate);
+
+  const synth = new Synth();
 
   const stringBuffers = [];
 
-  tab.forEach(string => {
-    const buffer = new Float32Array(bufferSize * totalDuration);
+  const buffer = new Float32Array(bufferLength);
+
+  tab.forEach((string, stringNum)  => {
+    if (stringNum != 4) return;
+    const stringBuffer = new Float32Array(bufferLength);
     let i = 0;
     string.forEach((note) => {
       const noteBuffer = synth.note(parseInt(note), noteDuration);
-      for (let j = 0; j < bufferSize; j++) {
+      for (let j = 0; j < noteBuffer.length; j++) {
         buffer[i + j] = noteBuffer[j];
         i++;
       }
     });
-    stringBuffers.push(buffer);
   });
-  console.log('stringBuffers: ', stringBuffers);
-
-  const bufferLength = bufferSize * totalDuration;
-  const buffer = new Float32Array(bufferLength);
-
-  for (let i = 0; i < bufferLength; i++) {
-    buffer[i] = stringBuffers[4][i];
-  }
-
-  console.log('buffer: ', buffer);
 
   audioBuffer.copyToChannel(buffer, 0);
 
