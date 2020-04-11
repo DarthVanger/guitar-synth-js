@@ -71,13 +71,12 @@ function playWithHarmonics() {
   const buffer = new Float32Array(bufferLength);
 
   tab.forEach((string, stringNum)  => {
-    if (stringNum != 4) return;
     const stringBuffer = new Float32Array(bufferLength);
     let i = 0;
     string.forEach((note) => {
       const noteBuffer = synth.note(parseInt(note), noteDuration);
       for (let j = 0; j < noteBuffer.length; j++) {
-        buffer[i + j] = noteBuffer[j];
+        buffer[i + j] = (buffer[i + j] + noteBuffer[j]) / 2;
         i++;
       }
     });

@@ -16,7 +16,7 @@ const strings = tabText.match(/.+|$/g).slice(0, -1);
 console.log('strings: ', strings);
 const tab = [];
 strings.forEach((s, i) => {
-  let nums = s.match(/[0-9]+/g);
+  let nums = s.match(/[0-9]+/g) || [];
   let stringPitch;
   if (nums) {
     switch(i) {
