@@ -1,6 +1,6 @@
 console.log('hello world');
 import Synth from './Synth.js';
-import { parseTab } from './tab.js';
+import { parseTab, tabNumToPitch } from './tab.js';
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const sampleRate = 44100;
@@ -58,8 +58,8 @@ function playWithHarmonics() {
   const tab = parseTab();
   console.log('tab: ', tab);
 
-  const noteDuration = 2;
-  const notesNum = 4;
+  const noteDuration = 0.1;
+  const notesNum = 73;
   const totalDuration = 8;
   const bufferLength = sampleRate * totalDuration;
 
@@ -74,14 +74,34 @@ function playWithHarmonics() {
   tab.forEach((string, stringNum)  => {
     const stringBuffer = new Float32Array(bufferLength);
     let i = 0;
-    string.forEach((note) => {
-      const noteBuffer = synth.note(parseInt(note), noteDuration);
+    Array.from(string).forEach((tabEntry) => {
+      let noteBuffer = new Float32Array(sampleRate * noteDuration);
+      if (tabEntry !== '-') {
+        const num = parseInt(tabEntry);
+        const pitch = tabNumToPitch(num, stringNum); 
+        noteBuffer = synth.note(pitch, noteDuration);
+      }
       for (let j = 0; j < noteBuffer.length; j++) {
-        buffer[i + j] = (buffer[i + j] + noteBuffer[j]) / 2;
+        stringBuffer[i + j] = noteBuffer[j];
         i++;
       }
     });
+    stringBuffers.push(stringBuffer);
   });
+
+  console.log('stringBuffers: ', stringBuffers);
+
+  for (let i = 0; i < bufferLength; i++) {
+    let sum = 0;
+    for (let s = 0; s < 6; s++) {
+      sum += stringBuffers[s][i];
+    }
+    const avg = sum / 6;
+
+    buffer[i] = avg;
+  }
+
+  console.log('buffer: ', buffer);
 
   audioBuffer.copyToChannel(buffer, 0);
 
