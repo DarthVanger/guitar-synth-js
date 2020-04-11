@@ -86,7 +86,6 @@ function playWithHarmonics() {
       } else {
         num = parseInt(tabEntry);
       }
-
       
       // if multidigint number -xx- play silence for second digit
       if (isTabEntryANumber && !isPreviousTabEntryANumber) {
