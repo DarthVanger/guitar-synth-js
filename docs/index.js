@@ -140,8 +140,6 @@ function playWithHarmonics() {
     }
   }
 
-  //textarea.innerHTML = '<p style="color:red">' + textarea.innerHTML + '</p>';
-
   console.log('stringBuffers: ', stringBuffers);
   console.log('mergedTab: ', mergedTab.map(s => s.join('')));
 
