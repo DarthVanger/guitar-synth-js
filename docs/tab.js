@@ -72,7 +72,7 @@ const parseTab = () => {
 
   console.log('tab: ', tab);
 
-  return tab.map(a => a.join(''));;
+  return tabText;
 
   console.log('tab: ', tab);
 }
