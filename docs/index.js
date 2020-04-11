@@ -74,13 +74,26 @@ function playWithHarmonics() {
   tab.forEach((string, stringNum)  => {
     const stringBuffer = new Float32Array(bufferLength);
     let i = 0;
-    Array.from(string).forEach((tabEntry) => {
+    Array.from(string).forEach((tabEntry, tabIndex) => {
       let noteBuffer = new Float32Array(sampleRate * noteDuration);
-      if (tabEntry !== '-') {
-        const num = parseInt(tabEntry);
+      const isTabEntryANumber = /[0-9]/.test(tabEntry);
+      const isPreviousTabEntryANumber = /[0-9]/.test(string[tabIndex - 1]);
+      const isNextTabEntryANumber = /[0-9]/.test(string[tabIndex + 1]);
+
+      let num;
+      if (isNextTabEntryANumber) {
+        num = parseInt(tabEntry + string[tabIndex + 1]);
+      } else {
+        num = parseInt(tabEntry);
+      }
+
+      
+      // if multidigint number -xx- play silence for second digit
+      if (isTabEntryANumber && !isPreviousTabEntryANumber) {
         const pitch = tabNumToPitch(num, stringNum); 
         noteBuffer = synth.note(pitch, noteDuration);
       }
+
       for (let j = 0; j < noteBuffer.length; j++) {
         stringBuffer[i + j] = noteBuffer[j];
         i++;
