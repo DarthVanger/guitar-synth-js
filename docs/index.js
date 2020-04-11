@@ -45,7 +45,7 @@ function playTab() {
       inStringIndex = 0;
       onAString = true;
     }
-    if (tab[i] == '|' && tab[i-1] == '-' && onAString) {
+    if (tab[i] == '|' && tab[i-1] == '-') {
       onAString = false;
       stringNum = ( stringNum + 1 ) % 6;
       noteLineNum++;
