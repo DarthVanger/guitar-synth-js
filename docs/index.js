@@ -131,12 +131,13 @@ function playWithHarmonics() {
 
     const notePlayTime = (inStringIndex + mergedTabIndex) * noteDuration * 1000;
 
-    noteHighlights.push(() => {
-      setTimeout(() => {
-        textarea.innerHTML = tab.substring(0, i) + '|' + tab.substring(i + 1);
-      }, notePlayTime);
-    });
-
+    if (stringNum % 5 === 0) {
+      noteHighlights.push(() => {
+        setTimeout(() => {
+          textarea.innerHTML = tab.substring(0, i) + `<span style="background: red">${tab[i]}</span>` + tab.substring(i + 1);
+        }, notePlayTime);
+      });
+    }
   }
 
   //textarea.innerHTML = '<p style="color:red">' + textarea.innerHTML + '</p>';
