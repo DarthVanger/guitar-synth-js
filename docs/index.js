@@ -57,13 +57,12 @@ function playWithHarmonics() {
 
   const audioBuffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
 
-  const buffer = audioBuffer.getChannelData(0);
-
   const synth = new Synth(buffer);
 
-  synth.tone(440, 5);
+  const note = synth.note(7, 5);
 
-  console.log('buffer: ', buffer);
+  audioBuffer.copyToChannel(note, 0);
+
   const source = audioCtx.createBufferSource();
   source.connect(audioCtx.destination)
   source.buffer = audioBuffer;
