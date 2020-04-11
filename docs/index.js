@@ -20,7 +20,7 @@ function playTab() {
   const synth = new Synth();
 
   const notesNum = Math.floor(tab.length / 6);
-  const noteDuration = 0.05;
+  const noteDuration = 0.1;
   const totalDuration = noteDuration * notesNum;
   const bufferLength = sampleRate * totalDuration;
 
