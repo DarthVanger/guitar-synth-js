@@ -173,7 +173,13 @@ function playWithHarmonics() {
   const dataArray = new Uint8Array(bufferLength);
 
   textarea.focus();
-  noteHighlights.map(f => f());
+  
+  audioCtx.onstatechange = function() {
+    if (audioCtx.state === 'running') {
+      console.log('context state:' , audioCtx.state);
+      noteHighlights.map(f => f());
+    }
+  }
   source.start();
 
   setTimeout(() => {
