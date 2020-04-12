@@ -1,5 +1,5 @@
 console.log('hello world');
-import Synth from './Synth.js';
+import Synth from './synth.js';
 import { parseTab, tabNumToPitch, textarea } from './tab.js';
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 
