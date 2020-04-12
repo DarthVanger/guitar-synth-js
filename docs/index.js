@@ -40,12 +40,12 @@ function playTab() {
   let inStringIndex = 0;
   let noteHighlights = [];
   for (let i = 0; i < tab.length; i++) {
-    if (tab[i] == '|' && tab[i+1] == '-') {
+    if (tab[i] == '|' && tab[i+1] == '-' && tab[i-1] !== '-') {
       tabPieceLength = 0;
       inStringIndex = 0;
       onAString = true;
     }
-    if (tab[i] == '|' && tab[i-1] == '-') {
+    if (tab[i] == '|' && tab[i-1] == '-' && tab[i+1] !== '-' && tab[i-2] !== 'M') {
       onAString = false;
       stringNum = ( stringNum + 1 ) % 6;
       noteLineNum++;
