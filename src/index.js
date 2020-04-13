@@ -118,7 +118,6 @@ function playBlock(tab) {
 
     playBuffer(soundSum, nextNote);
 
-    console.log('tab2: ', tab2);
     textarea2.innerHTML = tab2.reduce((acc, cur) => acc.concat(cur.join('')).concat('\n'), '');
 
     // decide which notes to play
@@ -144,10 +143,6 @@ function playBlock(tab) {
     //}
     i++;
   }
-
-  console.log('guitar: ', guitar);
-  console.log('guitar2: ', guitar2);
-
 }
 
 function playTab() {
