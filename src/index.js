@@ -103,7 +103,7 @@ function playBlock(tab) {
 
       stringSounds[s] = stringSound;
 
-      tab2[s][i] = '*';
+      tab2[s][i] = `<span style="color:red; font-weight:bold;">*</span>`.split();
     }
 
     let soundSum = new Float32Array(bufferLength);
