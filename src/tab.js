@@ -1,4 +1,9 @@
 export const textarea = document.querySelector('#tab-editor');
+textarea.addEventListener('paste', (e) => {
+  e.preventDefault();
+  const data = e.clipboardData.getData('text/plain');
+  textarea.innerHTML = data;//.trim().split('\n').map(s => s + '<br>').join('');
+});
 textarea.innerHTML = `
 D#|-------------------------------------------------------------------------|
 A#|------1-----------0------------1------------0----------------------------|
@@ -16,7 +21,7 @@ F#|-2--2-2-2--------------5--5-5-5------------------------------------------|
 C#|-2--2-2-2---3--3-3-3---5--5-5-5---2--2-2-2-------------------------------|
 G#|-0--0-0-0---3--3-3-3---3--3-3-3---2--2-2-2-------------------------------|
 C#|------------3--3-3-3--------------2--2-2-2-------------------------------|
-`.trim().split('\n').map(s => s + '<br>').join('');;
+`.trim().split('\n').map(s => s + '<br>').join('');
 
 export const tabNumToHz = (tabNum, stringNum) => {
     console.log(`tabNumToHz(${tabNum}, ${stringNum})`);

@@ -12,6 +12,14 @@ const bufferSize = sampleRate * duration;
 const audioCtx = new AudioContext({sampleRate});
 const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
 
+function playTab2() {
+  const tab = textarea.innerHTML;
+  console.log('tab:');
+  console.log(tab);
+  const lineEndingIndex = tab.indexOf('<br>');
+  console.log('lineEndingIndex:', lineEndingIndex);
+}
+
 function playTab() {
   console.log('playTab');
   const tab = parseTab();
@@ -143,3 +151,4 @@ function playTab() {
 }
 
 document.querySelector('[data-action="playTab"]').addEventListener('click', playTab);
+document.querySelector('[data-action="playTab2"]').addEventListener('click', playTab2);
