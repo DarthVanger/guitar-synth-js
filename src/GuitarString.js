@@ -3,8 +3,8 @@ import RingBuffer from './RingBuffer.js';
 const samplingRate = 44100;
 
 class GuitarString {
-  constructor(frequency) {
-    this.ringBuffer = new RingBuffer(Math.floor(samplingRate / frequency));
+  constructor(frequency, ringBuffer) {
+    this.ringBuffer = ringBuffer || new RingBuffer(Math.floor(samplingRate / frequency));
     let i = 0;
     while(!this.ringBuffer.isFull()) {
       this.ringBuffer.enqueue(0);

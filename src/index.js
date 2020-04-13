@@ -10,13 +10,24 @@ const duration = 10;
 const bufferSize = sampleRate * duration;
 
 const audioCtx = new AudioContext({sampleRate});
-const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
 
-playTab2();
+function playBuffer(buffer, callback) {
+  const audioBuffer = audioCtx.createBuffer(1, buffer.length, sampleRate);
+  audioBuffer.copyToChannel(buffer, 0);
+  const source = audioCtx.createBufferSource();
+  source.connect(audioCtx.destination);
+  source.buffer = audioBuffer;
+  source.onended = callback;
+  source.start();
+}
+
+let blockNum = 0;
+let blocks;
 function playTab2() {
-  const blocks = parseTab(textarea.innerHTML);
+  blocks = parseTab(textarea.innerHTML);
   console.log('blocks: ', blocks);
-  blocks.forEach(b => {playBlock(b)});
+  //blocks.forEach(b => {playBlock(b)});
+  playBlock(blocks[0]);
 }
 
 function playBlock(tab) {
@@ -24,23 +35,103 @@ function playBlock(tab) {
   console.log('play Block:');
   console.log(tab);
   const guitar = [[], [], [], [], [], [], []];
+  const buffers = [];
   const guitar2 = ['', '', '', '', '', ''];
   console.log('tab[0].length: ', tab[0].length);
-  for (let i=0; i<tab[0].length; i++) {
+  let i = 0;
+  nextNote();
+  function nextNote() {
+    if (i > tab[0].length) {
+      blockNum++;
+      if (blocks.length < i) {
+        playBlock(blocks[blockNum]);
+      }
+    }
+
+    // analyze notes to play for each string
+    //let numberOfNotesToPlay = 0;
+    //for (let s=0; s<6; s++) {
+    //  const tabEntry = tab[s][i];
+    //  console.log('for char: ', tabEntry);
+    //  const isTabNote = /[0-9]/.test(tabEntry);
+    //  let tabNoteNum;
+    //  if (isTabNote) {
+    //    console.log('isTabNote');
+    //    tabNoteNum = parseInt(tabEntry);
+    //    guitar[s][i] = tabNoteNum;
+    //    guitar2[s] += tabNoteNum;
+    //    numberOfNotesToPlay++;
+    //  } else {
+    //    const previousValue = '-';
+    //    guitar[s][i] = previousValue;
+    //    guitar2[s] += previousValue;
+    //  }
+    //}
+
+    // play the notes for all strings
+    const sliceDuration = 0.1; // one dash or number on a tab is 0.1 sec
+    const bufferLength = sampleRate * sliceDuration;
+    const buffer = new Float32Array(bufferLength);
+   
+    let stringSounds = [];
     for (let s=0; s<6; s++) {
       const tabEntry = tab[s][i];
       const isTabNote = /[0-9]/.test(tabEntry);
+      const stringSound = new Float32Array(bufferLength);
+
       if (isTabNote) {
-        console.log('isTabNote');
-        const tabNote = parseInt(tabEntry);
-        guitar[s][i] = tabNote;
-        guitar2[s] += tabNote;
-      } else {
-        const previousValue = '-';
-        guitar[s][i] = previousValue;
-        guitar2[s] += previousValue;
+        console.log(`tabEntry ${tabEntry} for string ${s} is a note`);
+        const tabNoteNum = parseInt(tabEntry);
+        const hz = tabNumToHz(tabNoteNum, s); 
+        console.log('hz: ', hz);
+        const string = new GuitarString(hz);
+
+        string.pluck();
+        let j = 0;
+        while (j < bufferLength) {
+          stringSound[j] = string.sample();
+          string.tic();
+          j++;
+        }
       }
+
+      stringSounds[s] = stringSound;
     }
+
+    let soundSum = new Float32Array(bufferLength);
+    for (let i=0; i<bufferLength; i++) {
+      let sum = 0;
+      stringSounds.forEach(s => {
+        sum += s[i];
+      });
+      const avg = sum / 6;
+      soundSum[i] = avg;
+    }
+
+    playBuffer(soundSum, nextNote);
+
+    // decide which notes to play
+    //if (numberOfNotesToPlay > 1) {
+    //  // silence all sounding notes because we have to play a chord
+    //  for (let s=0; s<6; s++) {
+    //    for (let j=0; j<sliceBufferLength; j++) {
+    //      const stringBuffer = buffer[s];
+    //      const offset = i * sliceBufferLength;
+    //      stringBuffer[offset + j] = 0;
+    //    }
+    //  }
+    //} else {
+      // let all sounding notes continue ringing
+    //  for (let s=0; s<6; s++) {
+    //    // copy previous noteBuffer of each strnig to current noteBuffer
+    //    for (let j=0; j<sliceBufferLength; j++) {
+    //      const stringBuffer = buffer[s];
+    //      const offset = i * sliceBufferLength;
+    //      stringBuffer[offset + j] = stringBuffer[-offset + j];
+    //    }
+    //  }
+    //}
+    i++;
   }
 
   console.log('guitar: ', guitar);
