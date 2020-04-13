@@ -26,7 +26,6 @@ let blocks;
 function playTab2() {
   blocks = parseTab(textarea.innerHTML);
   console.log('blocks: ', blocks);
-  //blocks.forEach(b => {playBlock(b)});
   playBlock(blocks[0]);
 }
 
@@ -38,9 +37,18 @@ function playBlock(tab) {
   const buffers = [];
   const guitar2 = ['', '', '', '', '', ''];
   console.log('tab[0].length: ', tab[0].length);
+
   let i = 0;
   nextNote();
   function nextNote() {
+    let tab2 = [];
+    tab.forEach((s, i) => {
+      tab2[i] = [];
+      for (let j=0; j<s.length; j++) {
+        tab2[i][j] = s[j];
+      }
+    });
+
     if (i > tab[0].length) {
       blockNum++;
       if (blocks.length < i) {
@@ -72,7 +80,7 @@ function playBlock(tab) {
     const sliceDuration = 0.1; // one dash or number on a tab is 0.1 sec
     const bufferLength = sampleRate * sliceDuration;
     const buffer = new Float32Array(bufferLength);
-   
+
     let stringSounds = [];
     for (let s=0; s<6; s++) {
       const tabEntry = tab[s][i];
@@ -80,10 +88,8 @@ function playBlock(tab) {
       const stringSound = new Float32Array(bufferLength);
 
       if (isTabNote) {
-        console.log(`tabEntry ${tabEntry} for string ${s} is a note`);
         const tabNoteNum = parseInt(tabEntry);
         const hz = tabNumToHz(tabNoteNum, s); 
-        console.log('hz: ', hz);
         const string = new GuitarString(hz);
 
         string.pluck();
@@ -96,6 +102,8 @@ function playBlock(tab) {
       }
 
       stringSounds[s] = stringSound;
+
+      tab2[s][i] = '*';
     }
 
     let soundSum = new Float32Array(bufferLength);
@@ -109,6 +117,9 @@ function playBlock(tab) {
     }
 
     playBuffer(soundSum, nextNote);
+
+    console.log('tab2: ', tab2);
+    textarea2.innerHTML = tab2.reduce((acc, cur) => acc.concat(cur.join('')).concat('\n'), '');
 
     // decide which notes to play
     //if (numberOfNotesToPlay > 1) {
@@ -137,7 +148,6 @@ function playBlock(tab) {
   console.log('guitar: ', guitar);
   console.log('guitar2: ', guitar2);
 
-  textarea2.innerHTML = textarea2.innerHTML + '\n\n' + guitar2.join('\n');
 }
 
 function playTab() {
