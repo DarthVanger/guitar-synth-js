@@ -18,8 +18,8 @@ G#|-0--0-0-0---3--3-3-3---3--3-3-3---2--2-2-2-------------------------------|
 C#|------------3--3-3-3--------------2--2-2-2-------------------------------|
 `.trim().split('\n').map(s => s + '<br>').join('');;
 
-export const tabNumToPitch = (tabNum, stringNum) => {
-    console.log(`tabNumToPitch(${tabNum}, ${stringNum})`);
+export const tabNumToHz = (tabNum, stringNum) => {
+    console.log(`tabNumToHz(${tabNum}, ${stringNum})`);
     let stringPitch;
     switch(stringNum) {
       case 0:
@@ -41,7 +41,9 @@ export const tabNumToPitch = (tabNum, stringNum) => {
         break;
     }
 
-   return stringPitch + tabNum;
+  const pitch = stringPitch + tabNum;
+  const hz = 440.0 * Math.pow(2, pitch / 12.0);
+  return hz;
 };
 
 const parseTab = () => {

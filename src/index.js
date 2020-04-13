@@ -1,6 +1,6 @@
 console.log('hello world');
-import Synth from './synth.js';
-import { parseTab, tabNumToPitch, textarea } from './tab.js';
+import GuitarString from './GuitarString.js';
+import { parseTab, tabNumToHz, textarea } from './tab.js';
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const sampleRate = 44100;
@@ -16,8 +16,6 @@ function playTab() {
   console.log('playTab');
   const tab = parseTab();
   console.log('tab: ', tab);
-
-  const synth = new Synth();
 
   const notesNum = Math.floor(tab.length / 6);
   const noteDuration = 0.1;
@@ -78,8 +76,16 @@ function playTab() {
     
     // if multidigint number -xx- play silence for second digit
     if (isTabEntryANumber && !isPreviousTabEntryANumber) {
-      const pitch = tabNumToPitch(num, stringNum); 
-      noteBuffer = synth.note(pitch, noteDuration);
+      const hz = tabNumToHz(num, stringNum); 
+      const string = new GuitarString(hz);
+      string.pluck();
+
+      let i = 0;
+      while (i < sampleRate * noteDuration) {
+        noteBuffer[i] = string.sample();
+        string.tic();
+        i++;
+      }
     }
     
     // write the note to the string buffer
