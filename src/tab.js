@@ -1,9 +1,11 @@
 export const textarea = document.querySelector('#tab-editor');
+
 textarea.addEventListener('paste', (e) => {
   e.preventDefault();
   const data = e.clipboardData.getData('text/plain');
-  textarea.innerHTML = data;//.trim().split('\n').map(s => s + '<br>').join('');
+  textarea.innerHTML = data;
 });
+
 textarea.innerHTML = `
 D#|-------------------------------------------------------------------------|
 A#|------1-----------0------------1------------0----------------------------|
@@ -21,7 +23,7 @@ F#|-2--2-2-2--------------5--5-5-5------------------------------------------|
 C#|-2--2-2-2---3--3-3-3---5--5-5-5---2--2-2-2-------------------------------|
 G#|-0--0-0-0---3--3-3-3---3--3-3-3---2--2-2-2-------------------------------|
 C#|------------3--3-3-3--------------2--2-2-2-------------------------------|
-`.trim().split('\n').map(s => s + '<br>').join('');
+`.trim();
 
 export const tabNumToHz = (tabNum, stringNum) => {
     console.log(`tabNumToHz(${tabNum}, ${stringNum})`);
@@ -52,9 +54,50 @@ export const tabNumToHz = (tabNum, stringNum) => {
 };
 
 const parseTab = () => {
+  const tab = [];
   const tabText = textarea.innerHTML;
+  console.log('tabText:');
+  console.log(tabText);
 
-  return tabText;
+  let lineBeginningIndex = 0;
+  for (let i=0; i<tabText.length; i++) {
+    let isPartOfTab = false;
+    const char = tabText[i];
+    let isBeginningOfTabBlock = false;
+    if (tabText[i-1] == '\n' || i == 0) {
+      lineBeginningIndex = i;
+      isPartOfTab = true;
+    }
+
+    if (tabText[i] == '|') {
+      console.log('i: ', i);
+      let lineEndingIndex;
+      let isNotIt = false;
+      for (let j=0; j<5; j++) {
+        lineEndingIndex = tabText.indexOf('\n', (lineEndingIndex + 1) || i);
+        if (lineEndingIndex !== -1) {
+          const charUnderCurrentIndex = i + (lineEndingIndex - i) + (i - lineBeginningIndex) + 1;
+          console.log('charUnderCurrentIndex:', charUnderCurrentIndex);
+          console.log('charUnderCurrent text:', tabText[charUnderCurrentIndex]);
+          if (tabText[charUnderCurrentIndex] !== '|') {
+            isNotIt = true;
+          }
+        } else {
+          isNotIt = true;
+        }
+      }
+
+      if (!isNotIt) {
+        isPartOfTab = true;
+      }
+    }
+
+    tab[i] = { char: tabText[i], isPartOfTab  };
+  }
+
+
+  console.log('tab: ', tab);
+  return tab;
 }
 
 export { parseTab };

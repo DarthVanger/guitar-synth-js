@@ -12,12 +12,19 @@ const bufferSize = sampleRate * duration;
 const audioCtx = new AudioContext({sampleRate});
 const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
 
+playTab2();
 function playTab2() {
-  const tab = textarea.innerHTML;
-  console.log('tab:');
-  console.log(tab);
-  const lineEndingIndex = tab.indexOf('<br>');
-  console.log('lineEndingIndex:', lineEndingIndex);
+  const tab = parseTab(textarea.innerHTML);
+  const textarea2 = document.querySelector('#parsed-tab');
+  let html = [];
+  for (let i=0; i<tab.length; i++) {
+    html[i] = tab[i].char;
+    if (tab[i].isPartOfTab) {
+      html[i] = `<span style="background: red">${tab[i].char}</span>`;
+    }
+  }
+
+  textarea2.innerHTML = html.join('');
 }
 
 function playTab() {
