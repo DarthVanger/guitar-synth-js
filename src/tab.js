@@ -54,50 +54,30 @@ export const tabNumToHz = (tabNum, stringNum) => {
 };
 
 const parseTab = () => {
-  const tab = [];
   const tabText = textarea.innerHTML;
   console.log('tabText:');
   console.log(tabText);
 
-  let lineBeginningIndex = 0;
-  for (let i=0; i<tabText.length; i++) {
-    let isPartOfTab = false;
-    const char = tabText[i];
-    let isBeginningOfTabBlock = false;
-    if (tabText[i-1] == '\n' || i == 0) {
-      lineBeginningIndex = i;
-      isPartOfTab = true;
+  let isPartOfTab = true;
+
+  const lines = tabText.match(/[|-].+[-]+.+/g);
+  const blocks = [];
+  let guitar = [];
+  let blockNum = -1;
+  lines.forEach((l, i) => {
+    let stringNum = i % 6;
+    if (stringNum === 0) {
+      blockNum++;
+      blocks[blockNum] = [];
     }
+    const guitar = blocks[blockNum];
+    guitar[stringNum] = l;
+  });
+  console.log('lines: ', lines);
+  console.log('guitar: ', guitar);
+  console.log('blocks: ', blocks);
 
-    if (tabText[i] == '|') {
-      console.log('i: ', i);
-      let lineEndingIndex;
-      let isNotIt = false;
-      for (let j=0; j<5; j++) {
-        lineEndingIndex = tabText.indexOf('\n', (lineEndingIndex + 1) || i);
-        if (lineEndingIndex !== -1) {
-          const charUnderCurrentIndex = i + (lineEndingIndex - i) + (i - lineBeginningIndex) + 1;
-          console.log('charUnderCurrentIndex:', charUnderCurrentIndex);
-          console.log('charUnderCurrent text:', tabText[charUnderCurrentIndex]);
-          if (tabText[charUnderCurrentIndex] !== '|') {
-            isNotIt = true;
-          }
-        } else {
-          isNotIt = true;
-        }
-      }
-
-      if (!isNotIt) {
-        isPartOfTab = true;
-      }
-    }
-
-    tab[i] = { char: tabText[i], isPartOfTab  };
-  }
-
-
-  console.log('tab: ', tab);
-  return tab;
+  return blocks;
 }
 
 export { parseTab };

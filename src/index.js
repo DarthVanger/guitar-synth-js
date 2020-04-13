@@ -14,17 +14,39 @@ const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
 
 playTab2();
 function playTab2() {
-  const tab = parseTab(textarea.innerHTML);
+  const blocks = parseTab(textarea.innerHTML);
+  console.log('blocks: ', blocks);
+  blocks.forEach(b => {playBlock(b)});
+}
+
+function playBlock(tab) {
   const textarea2 = document.querySelector('#parsed-tab');
-  let html = [];
-  for (let i=0; i<tab.length; i++) {
-    html[i] = tab[i].char;
-    if (tab[i].isPartOfTab) {
-      html[i] = `<span style="background: red">${tab[i].char}</span>`;
+  console.log('play Block:');
+  console.log(tab);
+  const guitar = [[], [], [], [], [], [], []];
+  const guitar2 = ['', '', '', '', '', ''];
+  console.log('tab[0].length: ', tab[0].length);
+  for (let i=0; i<tab[0].length; i++) {
+    for (let s=0; s<6; s++) {
+      const tabEntry = tab[s][i];
+      const isTabNote = /[0-9]/.test(tabEntry);
+      if (isTabNote) {
+        console.log('isTabNote');
+        const tabNote = parseInt(tabEntry);
+        guitar[s][i] = tabNote;
+        guitar2[s] += tabNote;
+      } else {
+        const previousValue = '-';
+        guitar[s][i] = previousValue;
+        guitar2[s] += previousValue;
+      }
     }
   }
 
-  textarea2.innerHTML = html.join('');
+  console.log('guitar: ', guitar);
+  console.log('guitar2: ', guitar2);
+
+  textarea2.innerHTML = textarea2.innerHTML + '\n\n' + guitar2.join('\n');
 }
 
 function playTab() {
