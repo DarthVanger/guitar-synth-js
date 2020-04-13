@@ -80,19 +80,15 @@ function playTab() {
       const string = new GuitarString(hz);
       string.pluck();
 
-      let i = 0;
-      while (i < sampleRate * noteDuration) {
-        noteBuffer[i] = string.sample();
+      let j = 0;
+      while (j < sampleRate * noteDuration) {
+        const offset = (mergedTabIndex + inStringIndex) * sampleRate * noteDuration;
+        stringBuffers[stringNum][j + offset] = string.sample();
         string.tic();
-        i++;
+        j++;
       }
     }
     
-    // write the note to the string buffer
-    for (let j = 0; j < noteBuffer.length; j++) {
-      const offset = (mergedTabIndex + inStringIndex) * sampleRate * noteDuration;
-      stringBuffers[stringNum][j + offset] = noteBuffer[j];
-    }
 
     const notePlayTime = (inStringIndex + mergedTabIndex) * noteDuration * 1000;
 
