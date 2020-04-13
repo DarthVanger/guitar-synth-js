@@ -8,7 +8,7 @@ function createNoise() {
 
   // fill the buffer with noise
   for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
+    data[i] = Math.random() * 2 - 1;
   }
 
   let noise = audioCtx.createBufferSource();

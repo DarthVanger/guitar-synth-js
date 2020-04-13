@@ -139,4 +139,4 @@ function playTab() {
   source.start();
 }
 
-document.querySelector('[data-action="playTab"').addEventListener('click', playTab);
+document.querySelector('[data-action="playTab"]').addEventListener('click', playTab);

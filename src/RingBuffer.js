@@ -1,7 +1,7 @@
 class RingBuffer {
   constructor(capacity) {
     this.capacity = capacity; 
-    this.array = new Float64Array(capacity);
+    this.array = new Float32Array(capacity);
     this.size = 0;
     this.first = 0;
     this.last = 0;
@@ -48,4 +48,5 @@ class RingBuffer {
   }
 }
 
-module.exports = RingBuffer;
+//module.exports = RingBuffer;
+export default RingBuffer;
