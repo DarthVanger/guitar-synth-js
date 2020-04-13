@@ -59,7 +59,8 @@ function playTab() {
 
     if (!onAString) continue;
 
-    let noteBuffer = new Float32Array(sampleRate * noteDuration);
+    const guitarStringSoundDuration = 1;
+    let noteBuffer = new Float32Array(sampleRate * guitarStringSoundDuration);
     const tabEntry = tab[i];
     const isTabEntryANumber = /[0-9]/.test(tabEntry);
     const isPreviousTabEntryANumber = /[0-9]/.test(tab[i - 1]);
@@ -81,7 +82,7 @@ function playTab() {
       string.pluck();
 
       let j = 0;
-      while (j < sampleRate * noteDuration) {
+      while (j < sampleRate * guitarStringSoundDuration) {
         const offset = (mergedTabIndex + inStringIndex) * sampleRate * noteDuration;
         stringBuffers[stringNum][j + offset] = string.sample();
         string.tic();
