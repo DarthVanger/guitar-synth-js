@@ -32,27 +32,29 @@ function playTab2() {
 
 function playBlock(tab) {
   const textarea2 = document.querySelector('#parsed-tab');
+  console.log('playting tab piece: ');
   console.log(tab);
   const guitar = [[], [], [], [], [], [], []];
   const buffers = [];
   const guitar2 = ['', '', '', '', '', ''];
 
-  // create a copy of tab, to later enhance it with highlighting
-  // and show instead of the original tab
-  let tab2 = [];
-  tab.forEach((s, i) => {
-    tab2[i] = [];
-    for (let j=0; j<s.length; j++) {
-      tab2[i][j] = s[j];
-    }
-  });
-
   let noteNum = 0;
   nextNote();
   function nextNote() {
     if (noteNum > tab[0].length) {
-      playBlock(blocks[blocks.indexOf(tab) + 1]);
+      playBlock(blocks[1]);
+      return;
     }
+
+    // create a copy of tab block for each note we are playing
+    // in this copy we replace currently played notes with '*'
+    let tab2 = [];
+    tab.forEach((s, i) => {
+      tab2[i] = [];
+      for (let j=0; j<s.length; j++) {
+        tab2[i][j] = s[j];
+      }
+    });
 
     // play the notes for all strings
     const sliceDuration = 0.1; // one dash or number on a tab is 0.1 sec
@@ -77,7 +79,7 @@ function playBlock(tab) {
           string.tic();
           j++;
         }
-      }
+      } 
 
       stringSounds[s] = stringSound;
 
@@ -100,6 +102,7 @@ function playBlock(tab) {
     let newTabText = '';
     for (let s=0; s<6; s++) {
       const str = newTabText ? newTabText : tabTextOriginal;
+      const foundLine = str.match(tab[s]);
       newTabText = str.replace(tab[s], tab2Array[s]);
     }
     textarea.innerHTML = newTabText;
