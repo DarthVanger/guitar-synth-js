@@ -23,7 +23,9 @@ function playBuffer(buffer, callback) {
 
 let blockNum = 0;
 let blocks;
+let tabTextOriginal;
 function playTab2() {
+  tabTextOriginal = textarea.innerHTML;
   blocks = parseTab(textarea.innerHTML);
   console.log('blocks: ', blocks);
   playBlock(blocks[0]);
@@ -118,7 +120,13 @@ function playBlock(tab) {
 
     playBuffer(soundSum, nextNote);
 
-    textarea2.innerHTML = tab2.reduce((acc, cur) => acc.concat(cur.join('')).concat('\n'), '');
+    const tab2Array = tab2.map(s => s.join(''));
+    let newTabText = '';
+    for (let s=0; s<6; s++) {
+      const str = newTabText ? newTabText : tabTextOriginal;
+      newTabText = str.replace(tab[s], tab2Array[s]);
+    }
+    textarea.innerHTML = newTabText;
 
     // decide which notes to play
     //if (numberOfNotesToPlay > 1) {
