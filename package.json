@@ -4,6 +4,7 @@
   "description": "",
   "main": "RingBuffer.js",
   "scripts": {
+    "start": "npx http-server .",
     "test": "jest"
   },
   "author": "",
