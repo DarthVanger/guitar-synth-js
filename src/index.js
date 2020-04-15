@@ -36,7 +36,6 @@ function playTab2() {
 }
 
 function playBlock(tab) {
-  const textarea2 = document.querySelector('#parsed-tab');
   console.log('playting tab piece: ');
   console.log(tab);
 
@@ -55,35 +54,11 @@ function playBlock(tab) {
     }
 
     const tabCopy = copyTab(tab);
-
     const stringSounds = produceSound({tab, noteNum, tabCopy});
-
-    // sum all strings sound (average sounds)
-    let soundSum = new Float32Array(bufferLength);
-    for (let i=0; i<bufferLength; i++) {
-      let sum = 0;
-      stringSounds.forEach(s => {
-        sum += s[i];
-      });
-      const avg = sum / 6;
-      soundSum[i] = avg;
-    }
+    const soundSum = mixGuitarStringsSound(stringSounds);
 
     playBuffer(soundSum, nextNote);
-
-    // find the played tab in original tab text
-    // and replace it with highlightinig
-    const tab2Array = tabCopy.map(s => s.join(''));
-    let newTabText = '';
-    for (let s=0; s<6; s++) {
-      const str = newTabText ? newTabText : tabTextOriginal;
-      const foundLine = str.match(tab[s]);
-      newTabText = str.replace(tab[s], tab2Array[s]);
-    }
-    textarea.innerHTML = newTabText;
-
-    noteNum++;
-  }
+    replaceTabText({tab, tabCopy});
 }
 
 // create a copy of original tab[string] in format
@@ -131,6 +106,37 @@ function produceSound({tab, noteNum, tabCopy}) {
   }
 
   return stringSounds;
+}
+
+function mixGuitarStringsSound(stringSounds) {
+  // sum all strings sound (average sounds)
+  let soundSum = new Float32Array(bufferLength);
+  for (let i=0; i<bufferLength; i++) {
+    let sum = 0;
+    stringSounds.forEach(s => {
+      sum += s[i];
+    });
+    const avg = sum / 6;
+    soundSum[i] = avg;
+  }
+  return soundSum;
+}
+
+function replaceTabText({tab, tabCopy}) {
+  const textarea2 = document.querySelector('#parsed-tab');
+  // find the played tab in original tab text
+  // and replace it with highlightinig
+  const tab2Array = tabCopy.map(s => s.join(''));
+  let newTabText = '';
+  for (let s=0; s<6; s++) {
+    const str = newTabText ? newTabText : tabTextOriginal;
+    const foundLine = str.match(tab[s]);
+    newTabText = str.replace(tab[s], tab2Array[s]);
+  }
+  textarea.innerHTML = newTabText;
+
+  noteNum++;
+}
 }
 
 document.querySelector('[data-action="playTab2"]').addEventListener('click', playTab2);
