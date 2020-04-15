@@ -54,7 +54,6 @@ function playBlock(tab) {
     // play the notes for all strings
     const sliceDuration = 0.1; // one dash or number on a tab is 0.1 sec
     const bufferLength = sampleRate * sliceDuration;
-    const buffer = new Float32Array(bufferLength);
 
     // for each guitar string
     // put the sound in sound buffer
