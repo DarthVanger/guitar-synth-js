@@ -11,6 +11,11 @@ const bufferSize = sampleRate * duration;
 
 const audioCtx = new AudioContext({sampleRate});
 
+// one dash or number on a tab is 0.1 sec
+const sliceDuration = 0.1;
+const bufferLength = sampleRate * sliceDuration;
+
+
 function playBuffer(buffer, callback) {
   const audioBuffer = audioCtx.createBuffer(1, buffer.length, sampleRate);
   audioBuffer.copyToChannel(buffer, 0);
@@ -51,36 +56,7 @@ function playBlock(tab) {
 
     const tabCopy = copyTab(tab);
 
-    // play the notes for all strings
-    const sliceDuration = 0.1; // one dash or number on a tab is 0.1 sec
-    const bufferLength = sampleRate * sliceDuration;
-
-    // for each guitar string
-    // put the sound in sound buffer
-    let stringSounds = [];
-    for (let s=0; s<6; s++) {
-      const tabEntry = tab[s][noteNum];
-      const isTabNote = /[0-9]/.test(tabEntry);
-      const stringSound = new Float32Array(bufferLength);
-
-      if (isTabNote) {
-        const tabNoteNum = parseInt(tabEntry);
-        const hz = tabNumToHz(tabNoteNum, s); 
-        const string = new GuitarString(hz);
-
-        string.pluck();
-        let j = 0;
-        while (j < bufferLength) {
-          stringSound[j] = string.sample();
-          string.tic();
-          j++;
-        }
-      } 
-
-      stringSounds[s] = stringSound;
-
-      tabCopy[s][noteNum] = `<span style="color:red; font-weight:bold;">*</span>`.split();
-    }
+    const stringSounds = produceSound({tab, noteNum, tabCopy});
 
     // sum all strings sound (average sounds)
     let soundSum = new Float32Array(bufferLength);
@@ -121,6 +97,40 @@ function copyTab(tab) {
       }
     });
   return tabCopy;
+}
+
+// Produce sound for one vertical line of tab at noteNum index.
+// Also puts '*' char at the current index into tabCopy for each of 6 strings.
+// @return array of 6 sound buffers (one for each guitar string)
+function produceSound({tab, noteNum, tabCopy}) {
+  // for each guitar string
+  // put the sound in sound buffer
+  let stringSounds = [];
+  for (let s=0; s<6; s++) {
+    const tabEntry = tab[s][noteNum];
+    const isTabNote = /[0-9]/.test(tabEntry);
+    const stringSound = new Float32Array(bufferLength);
+
+    if (isTabNote) {
+      const tabNoteNum = parseInt(tabEntry);
+      const hz = tabNumToHz(tabNoteNum, s); 
+      const string = new GuitarString(hz);
+
+      string.pluck();
+      let j = 0;
+      while (j < bufferLength) {
+        stringSound[j] = string.sample();
+        string.tic();
+        j++;
+      }
+    } 
+
+    stringSounds[s] = stringSound;
+
+    tabCopy[s][noteNum] = `<span style="color:red; font-weight:bold;">*</span>`.split();
+  }
+
+  return stringSounds;
 }
 
 document.querySelector('[data-action="playTab2"]').addEventListener('click', playTab2);
