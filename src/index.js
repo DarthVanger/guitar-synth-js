@@ -37,14 +37,21 @@ function playBlock(tab) {
 
   let noteNum = 0;
   nextNote();
+
+  /**
+   * play next vertical line on a tab
+   */
   function nextNote() {
+    // if finished playing the current tab,
+    // play the next one
     if (noteNum > tab[0].length) {
       playBlock(blocks[1]);
       return;
     }
 
-    // create a copy of tab block for each note we are playing
-    // in this copy we replace currently played notes with '*'
+    // create a copy of original tab in format
+    // of 2 dimensional array [][]
+    // it is later transformed back to strings
     let tab2 = [];
     tab.forEach((s, i) => {
       tab2[i] = [];
@@ -58,6 +65,8 @@ function playBlock(tab) {
     const bufferLength = sampleRate * sliceDuration;
     const buffer = new Float32Array(bufferLength);
 
+    // for each guitar string
+    // put the sound in sound buffer
     let stringSounds = [];
     for (let s=0; s<6; s++) {
       const tabEntry = tab[s][noteNum];
@@ -83,6 +92,7 @@ function playBlock(tab) {
       tab2[s][noteNum] = `<span style="color:red; font-weight:bold;">*</span>`.split();
     }
 
+    // sum all strings sound (average sounds)
     let soundSum = new Float32Array(bufferLength);
     for (let i=0; i<bufferLength; i++) {
       let sum = 0;
@@ -95,6 +105,8 @@ function playBlock(tab) {
 
     playBuffer(soundSum, nextNote);
 
+    // find the played tab in original tab text
+    // and replace it with highlightinig
     const tab2Array = tab2.map(s => s.join(''));
     let newTabText = '';
     for (let s=0; s<6; s++) {
