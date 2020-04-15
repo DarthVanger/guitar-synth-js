@@ -34,9 +34,6 @@ function playBlock(tab) {
   const textarea2 = document.querySelector('#parsed-tab');
   console.log('playting tab piece: ');
   console.log(tab);
-  const guitar = [[], [], [], [], [], [], []];
-  const buffers = [];
-  const guitar2 = ['', '', '', '', '', ''];
 
   let noteNum = 0;
   nextNote();
