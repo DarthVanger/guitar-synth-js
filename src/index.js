@@ -49,16 +49,7 @@ function playBlock(tab) {
       return;
     }
 
-    // create a copy of original tab in format
-    // of 2 dimensional array [][]
-    // it is later transformed back to strings
-    let tab2 = [];
-    tab.forEach((s, i) => {
-      tab2[i] = [];
-      for (let j=0; j<s.length; j++) {
-        tab2[i][j] = s[j];
-      }
-    });
+    const tabCopy = copyTab(tab);
 
     // play the notes for all strings
     const sliceDuration = 0.1; // one dash or number on a tab is 0.1 sec
@@ -89,7 +80,7 @@ function playBlock(tab) {
 
       stringSounds[s] = stringSound;
 
-      tab2[s][noteNum] = `<span style="color:red; font-weight:bold;">*</span>`.split();
+      tabCopy[s][noteNum] = `<span style="color:red; font-weight:bold;">*</span>`.split();
     }
 
     // sum all strings sound (average sounds)
@@ -107,7 +98,7 @@ function playBlock(tab) {
 
     // find the played tab in original tab text
     // and replace it with highlightinig
-    const tab2Array = tab2.map(s => s.join(''));
+    const tab2Array = tabCopy.map(s => s.join(''));
     let newTabText = '';
     for (let s=0; s<6; s++) {
       const str = newTabText ? newTabText : tabTextOriginal;
@@ -118,6 +109,19 @@ function playBlock(tab) {
 
     noteNum++;
   }
+}
+
+// create a copy of original tab[string] in format
+// of 2 dimensional array [][]
+function copyTab(tab) {
+    let tabCopy = [];
+    tab.forEach((s, i) => {
+      tabCopy[i] = [];
+      for (let j=0; j<s.length; j++) {
+        tabCopy[i][j] = s[j];
+      }
+    });
+  return tabCopy;
 }
 
 document.querySelector('[data-action="playTab2"]').addEventListener('click', playTab2);
