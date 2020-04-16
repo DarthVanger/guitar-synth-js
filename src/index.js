@@ -55,6 +55,7 @@ function produceSound({tab, noteNum, tabCopy}) {
         string.tic();
         j++;
       }
+      playedNotes[s][noteNum] = string;
     }
 
     stringSounds[s] = stringSound;
