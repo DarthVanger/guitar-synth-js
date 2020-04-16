@@ -89,6 +89,7 @@ function playTab2() {
   playBlock(blocks[0]);
 }
 
+let blockNum = 0;
 function playBlock(tab) {
   console.log('playting tab piece: ');
   console.log(tab);
@@ -104,7 +105,8 @@ function playBlock(tab) {
     // if finished playing the current tab,
     // play the next one
     if (noteNum > tab[0].length) {
-      playBlock(blocks[1]);
+      blockNum++;
+      playBlock(blocks[blockNum]);
       return;
     }
 
