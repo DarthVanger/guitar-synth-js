@@ -15,6 +15,57 @@ const audioCtx = new AudioContext({sampleRate});
 const sliceDuration = 0.1;
 const bufferLength = sampleRate * sliceDuration;
 
+/**
+ * Produce sound for one vertical line of tab at noteNum index.
+ * Also puts '*' char at the current index into tabCopy for each of 6 strings.
+ * @return array of 6 sound buffers (one for each guitar string)
+ */
+let previousNotes = [];
+let playedNotes = [[], [], [], [], [], []];
+function produceSound({tab, noteNum, tabCopy}) {
+
+  // for each guitar string
+  // put the sound in sound buffer
+  let stringSounds = [];
+  for (let s=0; s<6; s++) {
+    let previousNoteShouldRing = Boolean(playedNotes[s][noteNum - 1]);
+    const tabEntry = tab[s][noteNum];
+    const isTabNote = /[0-9]/.test(tabEntry);
+    const stringSound = new Float32Array(bufferLength);
+
+    if (isTabNote) {
+      const tabNoteNum = parseInt(tabEntry);
+      previousNotes[s] = tabNoteNum;
+      const hz = tabNumToHz(tabNoteNum, s);
+      const string = new GuitarString(hz);
+
+      string.pluck();
+      let j = 0;
+      while (j < bufferLength) {
+        stringSound[j] = string.sample();
+        string.tic();
+        j++;
+      }
+      playedNotes[s][noteNum] = string;
+    } else if (previousNoteShouldRing) {
+      const string = playedNotes[s][noteNum - 1];
+      let j = 0;
+      while (j < bufferLength) {
+        stringSound[j] = string.sample();
+        string.tic();
+        j++;
+      }
+    }
+
+    stringSounds[s] = stringSound;
+
+    tabCopy[s][noteNum] = `<span style="color:red; font-weight:bold;">*</span>`.split();
+  }
+
+
+  return stringSounds;
+}
+
 
 function playBuffer(buffer, callback) {
   const audioBuffer = audioCtx.createBuffer(1, buffer.length, sampleRate);
@@ -74,39 +125,6 @@ function copyTab(tab) {
   return tabCopy;
 }
 
-// Produce sound for one vertical line of tab at noteNum index.
-// Also puts '*' char at the current index into tabCopy for each of 6 strings.
-// @return array of 6 sound buffers (one for each guitar string)
-function produceSound({tab, noteNum, tabCopy}) {
-  // for each guitar string
-  // put the sound in sound buffer
-  let stringSounds = [];
-  for (let s=0; s<6; s++) {
-    const tabEntry = tab[s][noteNum];
-    const isTabNote = /[0-9]/.test(tabEntry);
-    const stringSound = new Float32Array(bufferLength);
-
-    if (isTabNote) {
-      const tabNoteNum = parseInt(tabEntry);
-      const hz = tabNumToHz(tabNoteNum, s); 
-      const string = new GuitarString(hz);
-
-      string.pluck();
-      let j = 0;
-      while (j < bufferLength) {
-        stringSound[j] = string.sample();
-        string.tic();
-        j++;
-      }
-    } 
-
-    stringSounds[s] = stringSound;
-
-    tabCopy[s][noteNum] = `<span style="color:red; font-weight:bold;">*</span>`.split();
-  }
-
-  return stringSounds;
-}
 
 function mixGuitarStringsSound(stringSounds) {
   // sum all strings sound (average sounds)
