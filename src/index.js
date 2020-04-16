@@ -32,9 +32,11 @@ function produceSound({tab, noteNum, tabCopy}) {
     const tabEntry = tab[s][noteNum];
     const isTabNote = /[0-9]/.test(tabEntry);
     const stringSound = new Float32Array(bufferLength);
+    const isPreviousTabEntryADigit = /[0-9]/.test(tab[s][noteNum-1]);
+    const isNextTabEntryADigit = /[0-9]/.test(tab[s][noteNum + 1]);
 
-    if (isTabNote) {
-      const tabNoteNum = parseInt(tabEntry);
+    if (isTabNote && !isPreviousTabEntryADigit) {
+      const tabNoteNum = isNextTabEntryADigit ? parseInt(tab[s][noteNum] + tab[s][noteNum+1]) : parseInt(tabEntry);
       previousNotes[s] = tabNoteNum;
       const hz = tabNumToHz(tabNoteNum, s);
       const string = new GuitarString(hz);
@@ -90,6 +92,7 @@ function playTab2() {
 function playBlock(tab) {
   console.log('playting tab piece: ');
   console.log(tab);
+  playedNotes = [[], [], [], [], [], []];
 
   let noteNum = 0;
   nextNote();
