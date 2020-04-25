@@ -1,5 +1,5 @@
 {
-  "name": "synthesizer-js",
+  "name": "guitar-synth-js",
   "version": "1.0.0",
   "description": "",
   "main": "RingBuffer.js",
