@@ -1,15 +1,39 @@
 <script type="module" src="src/index.js"></script>
-<button type="button" data-action="playTab">Play Tab</button>
-<button type="button" data-action="playTab2">Play Tab 2</button>
-
-<br>
-<br>
 
 <style>
-  pre {
-    border: dotted pink 1px;
+  .string {
+    width: 100%;
+    margin-bottom: 1rem;
   }
+
+  .frets {
+    display: inline-block;
+  }
+
+  .string-name, .frets {
+    vertical-align: middle;
+  }
+
+  .frets button, .string-name {
+    display: inline-block;
+    border: solid brown 2px;
+    border-radius: 20%;
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+    font-size: 20px;
+    text-align: center;
+  }
+
 </style>
 
-<pre id="tab-editor" contenteditable="true" rows="50" style="width:100%"></pre>
-<pre id="parsed-tab" contenteditable="true" rows="50" style="width:100%"></pre>
+<h2>Click on the buttons to play guitar! :)</h2>
+
+<div class="string">
+  <button type="button" onclick="playGuitarString(-5)">E</button>
+  <button type="button" onclick="playGuitarString(-4)">1</button>
+  <button type="button" onclick="playGuitarString(-3)">2</button>
+  <button type="button" onclick="playGuitarString(-2)">3</button>
+  <button type="button" onclick="playGuitarString(-1)">4</button>
+  <button type="button" onclick="playGuitarString(-0)">5</button>
+</div>
