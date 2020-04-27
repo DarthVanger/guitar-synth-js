@@ -3,7 +3,7 @@ import GuitarString from './GuitarString.js';
 window.playGuitarString = (pitch) => {
   const hz = 440.0 * Math.pow(2, pitch / 12.0);
   const sampleRate = 44100;
-  const soundDurationSec = 10;
+  const soundDurationSec = 5;
   const soundBufferSize = sampleRate * soundDurationSec;;
   const soundBuffer = new Float32Array(soundBufferSize);
   const string = new GuitarString(hz);
@@ -29,3 +29,12 @@ function playBuffer({ buffer, sampleRate }) {
   source.buffer = audioBuffer;
   source.start();
 }
+
+document.querySelectorAll('button').forEach(b => {
+  b.addEventListener('click', e => {
+    e.target.classList.add('playing');
+    setTimeout(() => {
+      e.target.classList.remove('playing');
+    }, 5000);
+  });
+});

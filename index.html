@@ -1,32 +1,3 @@
-<script type="module" src="src/index.js"></script>
-
-<style>
-  .string {
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-
-  .frets {
-    display: inline-block;
-  }
-
-  .string-name, .frets {
-    vertical-align: middle;
-  }
-
-  .frets button, .string-name {
-    display: inline-block;
-    border: solid brown 2px;
-    border-radius: 20%;
-    height: 30px;
-    width: 30px;
-    line-height: 30px;
-    font-size: 20px;
-    text-align: center;
-  }
-
-</style>
-
 <h2>Click on the buttons to play guitar! :)</h2>
 
 <div class="string">
@@ -36,4 +7,123 @@
   <button type="button" onclick="playGuitarString(-2)">3</button>
   <button type="button" onclick="playGuitarString(-1)">4</button>
   <button type="button" onclick="playGuitarString(-0)">5</button>
+  <button type="button" onclick="playGuitarString(+1)">6</button>
 </div>
+
+<div class="string">
+  <button type="button" onclick="playGuitarString(-10)">H</button>
+  <button type="button" onclick="playGuitarString(-9)">1</button>
+  <button type="button" onclick="playGuitarString(-8)">2</button>
+  <button type="button" onclick="playGuitarString(-7)">3</button>
+  <button type="button" onclick="playGuitarString(-6)">4</button>
+  <button type="button" onclick="playGuitarString(-5)">5</button>
+  <button type="button" onclick="playGuitarString(-4)">6</button>
+</div>
+
+<div class="string">
+  <button type="button" onclick="playGuitarString(-14)">G</button>
+  <button type="button" onclick="playGuitarString(-13)">1</button>
+  <button type="button" onclick="playGuitarString(-12)">2</button>
+  <button type="button" onclick="playGuitarString(-11)">3</button>
+  <button type="button" onclick="playGuitarString(-10)">4</button>
+  <button type="button" onclick="playGuitarString(-9)">5</button>
+  <button type="button" onclick="playGuitarString(-8)">6</button>
+</div>
+
+<div class="string">
+  <button type="button" onclick="playGuitarString(-19)">D</button>
+  <button type="button" onclick="playGuitarString(-18)">1</button>
+  <button type="button" onclick="playGuitarString(-17)">2</button>
+  <button type="button" onclick="playGuitarString(-16)">3</button>
+  <button type="button" onclick="playGuitarString(-15)">4</button>
+  <button type="button" onclick="playGuitarString(-14)">5</button>
+  <button type="button" onclick="playGuitarString(-15)">6</button>
+</div>
+
+<div class="string">
+  <button type="button" onclick="playGuitarString(-24)">A</button>
+  <button type="button" onclick="playGuitarString(-23)">1</button>
+  <button type="button" onclick="playGuitarString(-22)">2</button>
+  <button type="button" onclick="playGuitarString(-21)">3</button>
+  <button type="button" onclick="playGuitarString(-20)">4</button>
+  <button type="button" onclick="playGuitarString(-19)">5</button>
+  <button type="button" onclick="playGuitarString(-18)">6</button>
+</div>
+
+<div class="string">
+  <button type="button" onclick="playGuitarString(-29)">H</button>
+  <button type="button" onclick="playGuitarString(-28)">1</button>
+  <button type="button" onclick="playGuitarString(-27)">2</button>
+  <button type="button" onclick="playGuitarString(-26)">3</button>
+  <button type="button" onclick="playGuitarString(-25)">4</button>
+  <button type="button" onclick="playGuitarString(-24)">5</button>
+  <button type="button" onclick="playGuitarString(-23)">6</button>
+</div>
+
+<style>
+  .string {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .string button {
+    display: inline-block;
+    vertical-align: middle;
+    border: solid 2px #009bff;
+    border-radius: 20%;
+    font-size: 20px;
+    height: 3em;
+    width: 3em;
+    line-height: 3em;
+    text-align: center;
+  }
+
+  @keyframes string-playing {
+    0%   {
+      border-top-right-radius: 20%;
+      border-top-left-radius: 20%;
+      border-bottom-left-radius: 20%;
+      border-bottom-right-radius: 20%;
+      border-color: #009bff;
+      border-width: 3px;
+    }
+    20%   {
+      border-top-right-radius: 50%;
+      border-top-left-radius: 20%;
+      border-bottom-left-radius: 20%;
+      border-bottom-right-radius: 20%;
+    }
+    40%   {
+      border-top-right-radius: 20%;
+      border-top-left-radius: 50%;
+      border-bottom-left-radius: 20%;
+      border-bottom-right-radius: 20%;
+      border-width: 6px;
+    }
+    60%   {
+      border-top-right-radius: 20%;
+      border-top-left-radius: 20%;
+      border-bottom-left-radius: 50%;
+      border-bottom-right-radius: 20%;
+    }
+    80%  {
+      border-top-right-radius: 20%;
+      border-top-left-radius: 20%;
+      border-bottom-left-radius: 20%;
+      border-bottom-right-radius: 50%;
+    }
+  }
+
+  .string button:focus,
+  .string button:active {
+    outline: none;
+  }
+
+  .string button.playing {
+    outline: none;
+    animation: string-playing 0.2s infinite;
+  }
+
+</style>
+
+<script type="module" src="src/index.js"></script>
