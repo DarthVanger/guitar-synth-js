@@ -12,7 +12,7 @@ import { GuitarString } from 'guitar-synth-js';
 const hz = 440;
 const string = new GuitarString(hz);
 
-// Create an empty buffer to store string soundd
+// Create an empty buffer to store the guitar string sound
 const sampleRate = 44100;
 const soundDurationSec = 5;
 const soundBufferSize = sampleRate * soundDurationSec;
