@@ -1,6 +1,6 @@
 {
   "name": "guitar-synth-js",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Guitar synthesizer",
   "main": "dist/index.js",
   "scripts": {
