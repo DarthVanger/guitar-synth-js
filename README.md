@@ -7,7 +7,7 @@ https://darthvanger.github.io/guitar-synth-js/
 ```js
 import { GuitarString } from 'guitar-synth-js';
 
-// Create a new `GuitarString`, passsing the sound frequency to the constructor
+// Create a new `GuitarString`, passing the sound frequency to the constructor
 // (e.g. `440` for concert A note)
 const hz = 440;
 const string = new GuitarString(hz);
