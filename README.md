@@ -1,3 +1,8 @@
-Work in progress!
+Js guitar synthesizer based on [Karplus–Strong algorithm](https://www.cs.princeton.edu/courses/archive/fall18/cos126/assignments/guitar-hero/).
 
-JS guitar synthesizer implemented according to the [Princeton's cos126 "guitar hero" assignment](https://www.cs.princeton.edu/courses/archive/fall18/cos126/assignments/guitar-hero/).
+## Demo
+https://darthvanger.github.io/guitar-synth-js/
+
+
+
+
