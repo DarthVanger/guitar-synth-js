@@ -1,16 +1,24 @@
 {
   "name": "guitar-synth-js",
   "version": "1.0.0",
-  "description": "",
-  "main": "RingBuffer.js",
+  "description": "Guitar synthesizer",
+  "main": "dist/index.js",
+  "scripts": {
+    "prepublish": "babel src --out-dir dist"
+  },
+  "babel": {
+    "presets": ["es2015"]
+  },
   "scripts": {
     "start": "npx http-server .",
     "test": "jest"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
     "jest": "^25.3.0"
-  },
-  "type": "module"
+  }
 }
